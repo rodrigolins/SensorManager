@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
-</head>
-<body>
-<p>List sensors</p>
-
-</body>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>List sensors</title>
+	</head>
+	<body>
+		<p>List sensors</p>
+		<ul th:each="sensor : ${sensors}">
+			<li th:text="'ID: ' + ${sensor.id}"></li>
+			<li th:text="'Sensor type: '+ ${sensor.sensorType.name}"></li>
+			<li th:text="'Model: '+ ${sensor.model}"></li>
+			<li th:text="'Manufacturer: '+ ${sensor.manufacturer}"></li>
+			<li>-------------------------------------</li>
+		</ul>
+	</body>
 </html>
 

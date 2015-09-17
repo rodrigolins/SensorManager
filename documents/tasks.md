@@ -1,0 +1,7 @@
+- Add validation
+- Tie Sensor to property
+- Add menu
+- Add bootstrap
+- Implement remove
+- Implement update
+-

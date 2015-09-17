@@ -43,10 +43,4 @@ public class SensorType {
 	public String toString() {
 		return "SensorType [id=" + id + ", name=" + name + "]";
 	};
-	
-	
-	
-	
-	
-
 }

@@ -26,7 +26,7 @@ public class PropertyController {
 	PropertyTypeRepository propertyTypeRepository;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String listProperties(Model model) {
+	public String propertiesList(Model model) {
 		model.addAttribute("properties", propertyRepository.findAll());
 		return "property/list";
 	}
@@ -42,8 +42,6 @@ public class PropertyController {
 	public String propertyNew(@Valid Property property, BindingResult bindingResult, Model model) {
 		System.out.println(property);
 		model.addAttribute("propertyType", propertyTypeRepository.findAll());
-		
-		
 		if (bindingResult.hasErrors()) {
 			return "property/new";	
 		}

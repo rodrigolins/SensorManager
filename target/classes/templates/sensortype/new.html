@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>New sensor type</title>
+	</head>
+	<body>
+		<h1> Add new sensor type</h1>
+		<form action="#" th:action="@{/sensortype/new}" th:object="${sensorType}" method="post">
+			<p>Name: <input type="text" th:field="*{name}"/></p>
+			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> Name error message </p>
+			<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
+		</form>
+	</body>
+</html>

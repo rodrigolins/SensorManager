@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Add sensor</title>
-</head>
-<body>
-<p>Add new sensor</p>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Add sensor</title>
+	</head>
+	<body>
+		<h1> Add new sensor</h1>
+		<div th:if="${sensorType.isEmpty()}">
+			<p>Please add a new sensor type before adding a property by clicking <a th:href="@{/sensortype/new}">here</a></p>
+		</div>
+		<div th:if="${!sensorType.isEmpty()}">
+			<form action="#" th:action="@{/sensor/new}" th:object="${sensor}" method="post">
+				<p>Sensor Type:
+					<select th:field="*{sensorType}">
+						<option th:each="type : ${sensorType}"
+								th:value="${type.id}"
+								th:text="${type.name}"></option>
+					</select>
+				</p>
+				
+				<p>Model: <input type="text" th:field="*{model}"/></p>
+				<p th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Model error message </p>
+				
+				<p>Manufacturer: <input type="text" th:field="*{manufacturer}"/></p>
+				<p th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}">Manufacturer error message </p>
+				<!-- http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/ -->
+				<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
+			</form>
+		</div>
 
-</body>
+	</body>
 </html>
