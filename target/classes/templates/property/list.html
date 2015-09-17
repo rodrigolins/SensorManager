@@ -6,6 +6,14 @@
 </head>
 <body>
 <p>List properties</p>
+		<ul th:each="property : ${properties}">
+			<li th:text="'ID: ' + ${property.id}"></li>
+			<li th:text="'Property type: '+ ${property.propertyType.name}"></li>
+			<li th:text="'Value: '+ ${property.value}"></li>
+			<li th:text="'Unit: '+ ${property.unit}"></li>
+			<li th:text="'Boundary: '+ ${property.boundary.name}"></li>
+			<li>-------------------------------------</li>
+		</ul>
 
 </body>
 </html>

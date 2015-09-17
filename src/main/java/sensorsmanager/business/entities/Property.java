@@ -17,6 +17,10 @@ public class Property {
 		private Boundary(String name){
 			this.name = name;
 		}
+		
+		public String getName() {
+			return name;
+		}
 	}
 	
 	@Id
@@ -42,6 +46,15 @@ public class Property {
 		this.unit = unit;
 		this.boundary = boundary;
 		this.sensor = sensor;
+	}
+	
+	public Property(PropertyType propertyType, Float value, String unit,
+			Boundary boundary) {
+		super();
+		this.propertyType = propertyType;
+		this.value = value;
+		this.unit = unit;
+		this.boundary = boundary;
 	}
 
 
@@ -98,8 +111,10 @@ public class Property {
 	@Override
 	public String toString() {
 		return "Property [id=" + id + ", propertyType=" + propertyType
-				+ ", value=" + value + ", unit=" + unit + ", sensor=" + sensor
-				+ "]";
-	};
+				+ ", value=" + value + ", unit=" + unit + ", boundary="
+				+ boundary + ", sensor=" + sensor + "]";
+	}
+	
+	
 	
 }

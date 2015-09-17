@@ -6,11 +6,40 @@
 	</head>
 	<body>
 		<h1> Add new property</h1>
-		<form action="#" th:action="@{/property/new}" th:object="${property}" method="post">
-			<p>Name: <input type="text" th:field="*{name}"/></p>
-			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> Name error message </p>
-			<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
-		</form>
-
+		<div th:if="${propertyType.isEmpty()}">
+			<p>Please add a new property type before adding a property by clicking <a th:href="@{/propertytype/new}">here</a></p>
+		</div>
+		<div th:if="${!propertyType.isEmpty()}">
+			<form action="#" th:action="@{/property/new}" th:object="${property}" method="post">
+			
+				<p>Property Type:
+					<select th:field="*{propertyType}">
+						<option th:each="type : ${propertyType}"
+								th:value="${type.id}"
+								th:text="${type.name}"></option>
+					</select>
+				</p>
+				
+				<p>Value: <input type="text" th:field="*{value}"/></p>
+				<p th:if="${#fields.hasErrors('value')}" th:errors="*{value}">Value error message </p>
+				
+				<p>Unit: <input type="text" th:field="*{unit}"/></p>
+				<p th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}">Unit error message </p>
+				<!-- http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/ -->
+				<p>Boundary:
+					<select th:field="*{boundary}">
+						<option th:each="type: ${T(sensorsmanager.business.entities.Property.Boundary).values()}"
+								th:value="${type}"
+								th:text="${type.name}"></option>
+					</select>
+				</p>
+				
+				
+				
+				<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
+				
+			</form>
+				
+		</div>
 	</body>
 </html>
