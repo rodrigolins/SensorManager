@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>New property</title>
-</head>
-<body>
-<p>New property</p>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>New property</title>
+	</head>
+	<body>
+		<h1> Add new property</h1>
+		<form action="#" th:action="@{/property/new}" th:object="${property}" method="post">
+			<p>Name: <input type="text" th:field="*{name}"/></p>
+			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> Name error message </p>
+			<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
+		</form>
 
-</body>
+	</body>
 </html>

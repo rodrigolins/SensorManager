@@ -1,13 +1,20 @@
 package sensorsmanager.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import sensorsmanager.business.entities.Property;
+import sensorsmanager.business.repositories.PropertyRepository;
+
 @Controller
 @RequestMapping("/property")
 public class PropertyController {
+
+	@Autowired
+	PropertyRepository repository;
 	
 	@RequestMapping("")
 	public String listProperties(Model model) {
@@ -15,7 +22,7 @@ public class PropertyController {
 	}
 	
 	@RequestMapping("/new")
-	public String newProperty(Model model) {
+	public String newProperty(Property property) {
 		return "property/new";
 	}
 	
