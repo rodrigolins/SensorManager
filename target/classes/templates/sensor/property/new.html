@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>New property</title>
+	</head>
+	<body>
+		<h1>Add new property to sensor</h1>
+		<div th:if="${propertyTypes.isEmpty()}">
+			<p>Please add a new property type before adding a property by clicking <a th:href="@{/propertytype/new}">here</a></p>
+		</div>
+		<div th:if="${!propertyTypes.isEmpty()}">
+			<ul>
+				<li th:text="'ID: ' + ${sensor.id}"></li>
+				<li th:text="'Sensor type: '+ ${sensor.sensorType.name}"></li>
+				<li th:text="'Model: '+ ${sensor.model}"></li>
+				<li th:text="'Manufacturer: '+ ${sensor.manufacturer}"></li>
+			</ul>
+			<form action="#" th:action="@{/sensor/{id}/property/add(id=${sensor.id})}" th:object="${property}" method="post">
+				<p>Property Type:
+					<select th:field="*{propertyType}">
+						<option th:each="type : ${propertyTypes}"
+								th:value="${type.id}"
+								th:text="${type.name}"></option>
+					</select>
+				</p>
+				
+				<p>Value: <input type="text" th:field="*{value}"/></p>
+				<p th:if="${#fields.hasErrors('value')}" th:errors="*{value}">Value error message </p>
+				<p>Unit: <input type="text" th:field="*{unit}"/></p>
+				<p th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}">Unit error message </p>
+				<!-- http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/ -->
+				<p>Boundary:
+					<select th:field="*{boundary}">
+						<option th:each="type: ${T(sensorsmanager.business.entities.Property.Boundary).values()}"
+								th:value="${type}"
+								th:text="${type.name}"></option>
+					</select>
+				</p>
+				<p><input type="submit" value="Submit" /><input type="reset" value="Reset"/></p>
+			</form>
+		</div>
+	</body>
+</html>
