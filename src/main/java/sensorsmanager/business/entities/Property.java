@@ -33,20 +33,7 @@ public class Property {
 	private String unit;
 	private Boundary boundary;
 	
-	@ManyToOne
-	private Sensor sensor;
-	
 	public Property() {}
-
-	public Property(PropertyType propertyType, Float value, String unit,
-			Boundary boundary, Sensor sensor) {
-		super();
-		this.propertyType = propertyType;
-		this.value = value;
-		this.unit = unit;
-		this.boundary = boundary;
-		this.sensor = sensor;
-	}
 	
 	public Property(PropertyType propertyType, Float value, String unit,
 			Boundary boundary) {
@@ -56,10 +43,7 @@ public class Property {
 		this.unit = unit;
 		this.boundary = boundary;
 	}
-
-
-
-
+	
 	public PropertyType getPropertyType() {
 		return propertyType;
 	}
@@ -84,14 +68,6 @@ public class Property {
 		this.unit = unit;
 	}
 
-	public Sensor getSensor() {
-		return sensor;
-	}
-
-	public void setSensor(Sensor sensor) {
-		this.sensor = sensor;
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -107,14 +83,12 @@ public class Property {
 	public void setBoundary(Boundary boundary) {
 		this.boundary = boundary;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Property [id=" + id + ", propertyType=" + propertyType
 				+ ", value=" + value + ", unit=" + unit + ", boundary="
-				+ boundary + ", sensor=" + sensor + "]";
+				+ boundary + "]";
 	}
-	
-	
 	
 }

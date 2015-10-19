@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Sensor detail</title>
-</head>
-<body>
-<p th:text="'Sensor detail with id: ' + ${id} + '?'" />
-
-</body>
+<html layout:decorator="base/base">
+	<head>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<h1>Sensor detail</h1>
+					<p>Delete</p>
+					<p>Update</p>
+					<p th:text="${sensor.id}"></p>
+					<p th:text="${sensor.sensorType.name}"></p>
+					<p th:text="${sensor.model}"></p>
+					<p th:text="${sensor.manufacturer}"></p>
+					
+					<table class="table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Type</th>
+								<th>Value</th>
+								<th>Unit</th>
+								<th>Boundary</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="property : ${sensor.properties}">
+								<td th:text="${property.id}"></td>
+								<td th:text="${property.propertyType.name}"></td>
+								<td th:text="${property.value}"></td>
+								<td th:text="${property.unit}"></td>
+								<td th:text="${property.boundary.name}"></td>
+								<td>Delete</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

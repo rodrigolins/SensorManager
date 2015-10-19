@@ -1,6 +1,7 @@
 spring:
     datasource:
-        url: jdbc:h2:mem:test
+#        url: jdbc:h2:mem:test
+        url: jdbc:h2:file:~/db
         username: sa
         password: sa
         driver-class-name: org.h2.Driver
@@ -9,4 +10,5 @@ spring:
         show-sql: false
         hibernate:
             format_sql: true
-            ddl-auto: create-drop
+#            ddl-auto: create-drop
+            ddl-auto: update

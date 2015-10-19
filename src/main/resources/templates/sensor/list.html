@@ -1,18 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorator="base/base">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>List sensors</title>
 	</head>
 	<body>
-		<p>List sensors</p>
-		<ul th:each="sensor : ${sensors}">
-			<li th:text="'ID: ' + ${sensor.id}"></li>
-			<li th:text="'Sensor type: '+ ${sensor.sensorType.name}"></li>
-			<li th:text="'Model: '+ ${sensor.model}"></li>
-			<li th:text="'Manufacturer: '+ ${sensor.manufacturer}"></li>
-			<li>-------------------------------------</li>
-		</ul>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<h1>List sensors</h1>
+					<p><a th:href="@{/sensor/new}">Add</a> new sensor</p>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Type</th>
+								<th>Model</th>
+								<th>Manufacturer</th>
+								<th>Add property</th>
+								<th>Details</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="sensor : ${sensors}">
+								<td th:text="${sensor.id}"></td>
+								<td th:text="${sensor.sensorType.name}"></td>
+								<td th:text="${sensor.model}"></td>
+								<td th:text="${sensor.manufacturer}"></td>
+								<td><a th:href="@{/sensor/{id}/property/add(id=${sensor.id})}">Add</a></td>
+								<td><a th:href="@{/sensor/{id}(id=${sensor.id})}">Details</a></td>
+								<td>Update</td>
+								<td>Delete</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul th:each="sensor : ${sensors}">
+						<li th:text="'ID: ' + ${sensor.id}"></li>
+						<li th:text="'Sensor type: '+ ${sensor.sensorType.name}"></li>
+						<li th:text="'Model: '+ ${sensor.model}"></li>
+						<li th:text="'Manufacturer: '+ ${sensor.manufacturer}"></li>
+						<li><a th:href="@{/sensor/{id}/property/add(id=${sensor.id})}">Add</a> property</li>
+						<li>---------------------------------------------------------</li>
+						<ul th:each="property : ${sensor.properties}">
+							<li th:text="'ID: ' + ${property.id}"></li>
+							<li th:text="'Property type: '+ ${property.propertyType.name}"></li>
+							<li th:text="'Value: '+ ${property.value}"></li>
+							<li th:text="'Unit: '+ ${property.unit}"></li>
+							<li th:text="'Boundary: '+ ${property.boundary.name}"></li>
+							<li>-------------------------------------</li>
+						</ul>			
+					</ul>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
-

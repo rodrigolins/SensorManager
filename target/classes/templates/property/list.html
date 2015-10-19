@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<p>List properties</p>
+		<p><a th:href="@{/property/new}">Add</a> new property</p>
 		<ul th:each="property : ${properties}">
 			<li th:text="'ID: ' + ${property.id}"></li>
 			<li th:text="'Property type: '+ ${property.propertyType.name}"></li>
