@@ -5,3 +5,4 @@
 - Implement remove
 - Implement update
 -
+th:class="${#fields.hasErrors('model')} ? form-group has-error : form-group"

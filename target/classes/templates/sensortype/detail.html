@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html layout:decorator="base/base">
+	<head>
+		<title>Sensor type detail</title>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<h1 class="pull-left">Sensor type detail</h1>
+					<div class="pull-left btn-menu-group">
+					  <a th:href="@{/sensortype/{id}/update(id=${sensortype.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+					  <a th:href="@{/sensortype/{id}/delete(id=${sensortype.id})}" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+					</div>
+				</div>
+				<div class="row">
+					<form class="form-horizontal">
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">ID:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${sensortype.id}"></p>
+							</div>
+						</div>
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">Name:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${sensortype.name}"></p>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

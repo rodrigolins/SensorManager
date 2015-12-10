@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 public class Sensor {
 	
@@ -19,7 +21,11 @@ public class Sensor {
 	
 	@ManyToOne
 	private SensorType sensorType;
+	
+	@NotBlank
 	private String model;
+	
+	@NotBlank
 	private String manufacturer;
 	
 	@OneToMany

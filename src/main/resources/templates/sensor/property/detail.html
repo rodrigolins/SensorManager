@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html layout:decorator="base/base">
+	<head>
+		<title>Property detail</title>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<h1 class="pull-left">Property detail</h1>
+					<div class="pull-left btn-menu-group">
+					  <a th:href="@{/sensor/{id}/property/{propertyid}/update(id=${sensor.id}, propertyid=${property.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+					  <a th:href="@{/sensor/{id}/property/{propertyid}/delete(id=${sensor.id}, propertyid=${property.id})}" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+					</div>
+				</div>
+				<div class="row">
+					<form class="form-horizontal">
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">ID:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${property.id}"></p>
+							</div>
+						</div>
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">Property type:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${property.propertyType.name}"></p>
+							</div>
+						</div>
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">Value:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${property.value}"></p>
+							</div>
+						</div>
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">Unit:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${property.unit}"></p>
+							</div>
+						</div>
+						<div class="_form-group">
+							<label class="col-sm-2 control-label">Boundary:</label>
+							<div class="col-sm-10">
+								<p class="form-control-static" th:text="${property.boundary.name}"></p>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

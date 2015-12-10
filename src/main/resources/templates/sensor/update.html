@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html layout:decorator="base/base">
+	<head>
+		<title>Sensor update</title>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<h1 class="pull-left">Sensor update</h1>
+				</div>
+				<form class="form-horizontal" th:action="@{/sensor/{id}/update(id=${sensor.id})}" th:object="${sensor}" method="post">
+				
+					<div class="row">
+						<input type="hidden" th:field="${sensor.id}" />
+						<div class="form-group">
+							<label for="sensorType" class="col-sm-4 control-label">Sensor type:</label>
+							<div class="col-sm-4">
+								<select class="form-control" th:field="*{sensorType}">
+									<option th:each="type : ${sensorType}"
+											th:value="${type.id}"
+											th:text="${type.name}"></option>
+								</select>
+							</div>
+							<div class="col-sm-4"></div>
+						</div>
+						<div th:class="${#fields.hasErrors('model')} ? 'form-group has-error' : form-group">
+							<label th:for="*{model}" class="col-sm-4 control-label">Model:</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" th:field="*{model}"/>
+								<span th:class="${#fields.hasErrors('model')} ? help-block" th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Model error message </span>
+							</div>
+							<div class="col-sm-4"></div>
+						</div>
+						<div th:class="${#fields.hasErrors('manufacturer')} ? 'form-group has-error' : form-group">
+							<label for="manufacturer" class="col-sm-4 control-label">Manufacturer:</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" th:field="*{manufacturer}"/>
+								<span th:class="${#fields.hasErrors('manufacturer')} ? help-block" th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}">Manufacturer error message </span>
+							</div>
+							<div class="col-sm-4"></div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<button type="submit" class="btn btn-default">Save</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<hr />
+						<div class="btn-group btn-property-group">
+							<a th:href="@{/sensor/{id}/property/add(id=${sensor.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New property</a>
+						</div>
+					</div>
+					
+					<div class="row" th:if="${not #lists.isEmpty(sensor.properties)}">
+						<div class="panel panel-default">
+							<div class="panel-heading">Properties</div>
+							<table class="table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Type</th>
+										<th>Value</th>
+										<th>Unit</th>
+										<th>Boundary</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="property, propertyStat : *{properties}">
+										<!-- <td th:text="${propertyStat.count}"></td> -->
+										<input type="hidden" name="id" th:field="*{properties[__${propertyStat.index}__].id}" th:id="${'id-'+propertyStat.index}" />
+										<input type="hidden" name="propertyType.id" th:field="*{properties[__${propertyStat.index}__].propertyType.id}" th:id="${'propertyType.id-'+propertyStat.index}" />
+										<input type="hidden" name="propertyType.name" th:field="*{properties[__${propertyStat.index}__].propertyType.name}" th:id="${'propertyType.name-'+propertyStat.index}" />
+										<input type="hidden" name="value" th:field="*{properties[__${propertyStat.index}__].value}" th:id="${'value-'+propertyStat.index}" />
+										<input type="hidden" name="unit" th:field="*{properties[__${propertyStat.index}__].unit}" th:id="${'unit-'+propertyStat.index}" />
+										<input type="hidden" name="boundary" th:field="*{properties[__${propertyStat.index}__].boundary}" th:id="${'boundary-'+propertyStat.index}" />
+										<td th:text="${property.id}"></td>
+										<td th:text="${property.propertyType.name}"></td>
+										<td th:text="${property.value}"></td>
+										<td th:text="${property.unit}"></td>
+										<td th:text="${property.boundary.name}"></td>
+										<td><a th:href="@{/sensor/{id}/property/{propertyid}/delete(id=${sensor.id}, propertyid=${property.id})}" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+						
+				</form>
+				
+			</div>
+			
+		</div>
+	</body>
+</html>

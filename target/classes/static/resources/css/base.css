@@ -1,17 +1,43 @@
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  font-family: 'Montserrat';
+  	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: 'Montserrat';
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
+	display: block;
+	vertical-align: middle;
+}
+
+.footer > .container {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	height: 60px;
+	padding-top: 10px;
+}
+
+.btn-menu-group {
+	bottom: 20px;
+    position: relative;
+    top: 23px;
+    left: 15px;
+}
+
+.clickable-row {
+	cursor: pointer;
+}
+
+.btn-property-group {
+	margin: 0 0 20px 0;
 }

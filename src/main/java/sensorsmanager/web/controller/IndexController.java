@@ -10,7 +10,7 @@ public class IndexController {
 	
 	@RequestMapping("/")
 	public String index(Model model) {
-		return "index";
+		return "redirect:/sensor/";
 	}
 
 }

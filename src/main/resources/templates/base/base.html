@@ -4,6 +4,7 @@
 		<title layout:fragment="title">Base template title</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/frameworks/bootstrap-3.3.5-dist/css/bootstrap.min.css}" />
+		<!-- <link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/frameworks/bootstrap-3.3.5-dist/css/superhero.min.css}" /> -->
 		<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/frameworks/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css}" />
 		
 		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Montserrat:400,700' />
@@ -27,18 +28,21 @@
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
-			        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-			        <li><a href="#">Link</a></li>
 			        <li class="dropdown">
-			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sensors <span class="caret"></span></a>
 			          <ul class="dropdown-menu">
-			            <li><a href="#">Action</a></li>
-			            <li><a href="#">Another action</a></li>
-			            <li><a href="#">Something else here</a></li>
+			          	<li><a th:href="@{/sensor/}">All sensors</a></li>
+			            <li><a th:href="@{/sensor/new/}">New sensor</a></li>
 			            <li role="separator" class="divider"></li>
-			            <li><a href="#">Separated link</a></li>
-			            <li role="separator" class="divider"></li>
-			            <li><a href="#">One more separated link</a></li>
+			            <li><a th:href="@{/sensortype/}">All sensor types</a></li>
+			            <li><a th:href="@{/sensortype/new/}">New sensor type</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Property <span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			          	<li><a th:href="@{/propertytype/}">All property types</a></li>
+			            <li><a th:href="@{/propertytype/new/}">New property type</a></li>
 			          </ul>
 			        </li>
 			      </ul>
@@ -46,6 +50,20 @@
 			  </div><!-- /.container-fluid -->
 			</nav>
 		</div>
+		</section>
+		
+		<section id="warnings">
+			<div class="container">
+				<div class="row">
+					<div th:if="${errorMessage}">
+						<div class="alert alert-danger alert-dismissible" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><span th:text="${errorMessage}"></span></div>
+					</div>
+					<div th:if="${successMessage}">
+						<div class="alert alert-success alert-dismissible fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><span th:text="${successMessage}"></span></div>
+					</div>
+				</div>
+			</div>
+		
 		</section>
 		
 		<section id="content">
@@ -64,11 +82,16 @@
 		<section id="footer">
 			<footer class="footer">
 		      <div class="container">
-		        <p class="text-muted">Place sticky footer content here.</p>
+		      	<div class="row">
+		      		<p>Master thesis title: Uncertainty Context Models. <br />
+		      			Student: Rodrigo Lins de Oliveira
+		      		</p>
+		      	</div>
 		      </div>
 		    </footer>
 		</section>
 		<script th:src="@{/resources/frameworks/jquery/jquery-1.11.3.min.js}"></script>
 		<script th:src="@{/resources/frameworks/bootstrap-3.3.5-dist/js/bootstrap.min.js}"></script>
+		<script th:src="@{/resources/js/base.js}"></script>
 	</body>
 </html>
