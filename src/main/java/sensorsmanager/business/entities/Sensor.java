@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -23,9 +24,11 @@ public class Sensor {
 	private SensorType sensorType;
 	
 	@NotBlank
+	@Size(min=3, max=50)
 	private String model;
 	
 	@NotBlank
+	@Size(min=3, max=50)
 	private String manufacturer;
 	
 	@OneToMany

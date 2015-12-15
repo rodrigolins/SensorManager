@@ -1,5 +1,7 @@
 package sensorsmanager.business.entities;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ public class PropertyType {
 	private Long id;
 	
 	@Size(min=3, max=35)
+	@NotBlank
 	private String name;
 	
 	public PropertyType() {}

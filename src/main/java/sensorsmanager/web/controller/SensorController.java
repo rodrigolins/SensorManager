@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sensorsmanager.business.entities.Property;
 import sensorsmanager.business.entities.Sensor;
 import sensorsmanager.business.repositories.PropertyRepository;
@@ -38,37 +40,83 @@ public class SensorController {
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public String sensorsList(Model model) {
+        System.out.println("GET - sensorsList");
 		model.addAttribute("sensors", sensorRepository.findAll());
 		return "sensor/list";
 	}
 	
 	@RequestMapping(value="/new", method=RequestMethod.GET)
-	public String sensorNew(Model model) {
+	public String sensorCreate(Model model) {
+        System.out.println("GET - sensorNew");
 		model.addAttribute("sensorType", sensorTypeRepository.findAll());
 		model.addAttribute("sensor", new Sensor());
 		return "sensor/new";
 	}
 	
 	@RequestMapping(value="/new", method=RequestMethod.POST)
-	public String sensorNew(@Valid Sensor sensor, BindingResult bindingResult, Model model) {
+	public String sensorCreate(@Valid Sensor sensor, BindingResult bindingResult, Model model,
+							final RedirectAttributes redirectAttributes) {
+        System.out.println("POST - sensorNew");
 		System.out.println(sensor);
 		model.addAttribute("sensorType", sensorTypeRepository.findAll());
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.getAllErrors());
-			return "sensor/new";	
+//            redirectAttributes.addFlashAttribute("errorMessage", "Fail to create a new sensor");
+			model.addAttribute("errorMessage", "Fail to create a new sensor. Check error messages.");
+			return "sensor/new";
 		}
 		sensorRepository.save(new Sensor(sensor.getSensorType(), sensor.getModel(), sensor.getManufacturer()));
+        redirectAttributes.addFlashAttribute("successMessage", "Sensor created successfully");
 		return "redirect:/sensor";
 	}
-	
-	@RequestMapping("/{id}/delete")
-	public String deleteSensor(@PathVariable Long id, Model model) {
+
+    @RequestMapping("/{id}")
+    public String sensorDetail(@PathVariable Long id, Model model) {
+        System.out.println("GET - sensorDetail");
+        Sensor sensor = sensorRepository.findOne(id);
+        model.addAttribute("sensor", sensor);
+        return "sensor/detail";
+    }
+
+    @RequestMapping(value="/{id}/update", method=RequestMethod.GET)
+    public String sensorUpdate(@PathVariable Long id, Model model) {
+        System.out.println("GET - sensorUpdate");
+        Sensor sensor = sensorRepository.findOne(id);
+        model.addAttribute("sensor", sensor);
+        model.addAttribute("sensorType", sensorTypeRepository.findAll());
+        return "sensor/update";
+    }
+
+    // FOLLOW ALWAYS THIS ORDER: PathVariable, ModelAttribute, BingResult, Model
+    @RequestMapping(value="/{id}/update", method=RequestMethod.POST)
+    public String sensorUpdate(@PathVariable Long id, @Valid @ModelAttribute("sensor") Sensor sensor,
+                               BindingResult bindingResult, Model model) {
+        System.out.println("POST - sensorUpdate");
+        System.out.println("Before update: " + sensor);
+        model.addAttribute("sensorType", sensorTypeRepository.findAll());
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("Error occured when updating sensor.");
+            System.out.println(bindingResult);
+
+            return "sensor/update";
+        }
+
+        System.out.println("Sensor updated successfully!");
+        sensorRepository.save(sensor);
+        return "redirect:/sensor";
+    }
+
+	@RequestMapping(value="/{id}/delete", method = RequestMethod.GET)
+	public String sensorDelete(@PathVariable Long id, Model model) {
+        System.out.println("GET - deleteSensor");
 		model.addAttribute("id", id);
 		return "sensor/delete";
 	}
 	
 	@RequestMapping(value="/{id}/property/{propertyid}/delete", method=RequestMethod.GET)
 	public String removePropertyFromSensor(@PathVariable Long id, @PathVariable Long propertyid, Model model) {
+        System.out.println("GET - removePropertyFromSensor");
 		Sensor sensor = sensorRepository.findOne(id);
 		/*if(sensor == null) {
 			model.addAttribute("errorMessage", "Sensor doesn't exist! Please check the sensor id and try again.");
@@ -93,50 +141,49 @@ public class SensorController {
 		model.addAttribute("errorMessage", "Going out directly");
 		return "sensor/list";
 	}
-	
+
+	// DO not remove Property from method signature
 	@RequestMapping(value="/{id}/property/add", method=RequestMethod.GET)
-	public String addPropertyToSensor(@PathVariable Long id, Model model) {
+	public String addPropertyToSensor(@PathVariable Long id, Model model, Property property) {
+        System.out.println("GET - addPropertyToSensor");
 		model.addAttribute("sensor", sensorRepository.findOne(id));
 		model.addAttribute("propertyTypes", propertyTypeRepository.findAll());
-		model.addAttribute("property", new Property());
 		return "sensor/property/new";
 	}
-	
-	@RequestMapping(value="/{id}/property/add", method=RequestMethod.POST)
-	public String addPropertyToSensor(@Valid Property property, @PathVariable Long id, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult);
-			return "/" + id + "/property/add";
-		}
-		Sensor sensor = sensorRepository.findOne(id);
-		System.out.println(sensor);
-		System.out.println(property);
-		Property newProperty = new Property(property.getPropertyType(), property.getValue(), 
-				property.getUnit(),	property.getBoundary());
-		propertyRepository.save(newProperty);
-		System.out.println(newProperty);
-		sensor.addProperty(newProperty);
-		sensorRepository.save(sensor);
-		/*if (sensor.getProperties() == null) {
-			List<Property> properties = new ArrayList<Property>();
-			properties.add(property);
-			sensor.setProperties(properties);
-			propertyRepository.save(property);
-			sensorRepository.save(sensor);
-		} else {
-//			List<Property> properties = sensor.getProperties();
-//			properties.add(property);
-//			property.setSensor(sensor);
-//			propertyRepository.save(property);
-			sensor.getProperties().add(property);
-			sensorRepository.save(sensor);
-		}*/
-		return "redirect:/sensor";
-	}
+
+    @RequestMapping(value="/{id}/property/add", method=RequestMethod.POST)
+    public String addPropertyToSensor(@PathVariable Long id, @Valid Property property, BindingResult bindingResult,
+                                      Model model, final RedirectAttributes redirectAttributes) {
+
+        System.out.println("POST - addPropertyToSensor");
+        System.out.println("property = " + property);
+
+        Sensor sensor = sensorRepository.findOne(id);
+        model.addAttribute("sensor", sensor);
+
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+            model.addAttribute("propertyTypes", propertyTypeRepository.findAll());
+            model.addAttribute("errorMessage", "Fail to add a new property to a sensor. Check error messages.");
+            return "sensor/property/new";
+        }
+        Property newProperty = new Property(property.getPropertyType(), property.getValue(),
+                property.getUnit(),	property.getBoundary());
+
+        System.out.println("newProperty = " + newProperty);
+        propertyRepository.save(newProperty);
+
+        System.out.println("newProperty = " + newProperty);
+
+        sensor.addProperty(newProperty);
+        sensorRepository.save(sensor);
+        return "redirect:/sensor";
+    }
+
 	
 	@RequestMapping(value="/{id}/property/{propertyid}", method=RequestMethod.GET)
 	public String sensorPropertyDetail(@PathVariable Long id, @PathVariable Long propertyid, Model model) {
-		System.out.println("Calling sensorPropertyDetail - GET");
+        System.out.println("GET - sensorPropertyDetail");
 		Sensor sensor = sensorRepository.findOne(id);
 		model.addAttribute("sensor", sensor);
 		Property property = propertyRepository.findOne(propertyid);
@@ -147,7 +194,7 @@ public class SensorController {
 	
 	@RequestMapping(value="/{id}/property/{propertyid}/update", method=RequestMethod.GET)
 	public String sensorPropertyUpdate(@PathVariable Long id, @PathVariable Long propertyid, Model model) {
-		System.out.println("Calling property update from sensor - GET");
+        System.out.println("GET - sensorPropertyUpdate");
 		Sensor sensor = sensorRepository.findOne(id);
 		model.addAttribute("sensor", sensor);
 		Property property = propertyRepository.findOne(propertyid);
@@ -157,8 +204,9 @@ public class SensorController {
 	}
 	
 	@RequestMapping(value="/{id}/property/{propertyid}/update", method=RequestMethod.POST)
-	public String sensorPropertyUpdate(@ModelAttribute("property") Property property, @PathVariable Long id, @PathVariable Long propertyid, BindingResult bindingResult, Model model) {
-		System.out.println("Calling property update from sensor - POST");
+	public String sensorPropertyUpdate(@ModelAttribute("property") Property property, @PathVariable Long id,
+									   @PathVariable Long propertyid, BindingResult bindingResult, Model model) {
+        System.out.println("POST - sensorPropertyUpdate");
 		System.out.println("Before update: " + property);
 		if (bindingResult.hasErrors()) {
 			System.out.println("Error occured when updating property.");
@@ -176,38 +224,6 @@ public class SensorController {
 		model.addAttribute("successMessage", "Property updated successfully");
 //		return "redirect:/sensor";
 		return "/sensor/property/detail";
-	}
-
-	@RequestMapping("/{id}")
-	public String sensorDetail(@PathVariable Long id, Model model) {
-		Sensor sensor = sensorRepository.findOne(id);
-		model.addAttribute("sensor", sensor);
-		return "sensor/detail";
-	}
-	
-	@RequestMapping(value="/{id}/update", method=RequestMethod.GET)
-	public String sensorUpdate(@PathVariable Long id, Model model) {
-		System.out.println("Calling sensor update - GET");
-		Sensor sensor = sensorRepository.findOne(id);
-		model.addAttribute("sensor", sensor);
-		model.addAttribute("sensorType", sensorTypeRepository.findAll());
-		return "sensor/update";
-	}
-	
-	@RequestMapping(value="/{id}/update", method=RequestMethod.POST)
-	public String sensorUpdate(@ModelAttribute("sensor") Sensor sensor, @PathVariable Long id, BindingResult bindingResult, Model model) {
-		System.out.println("Calling sensor update - POST");
-		System.out.println("Before update: " + sensor);
-		if (bindingResult.hasErrors()) {
-			System.out.println("Error occured when updating sensor.");
-			System.out.println(bindingResult);
-			model.addAttribute("sensorType", sensorTypeRepository.findAll());
-			return "/" + id + "/update";
-		}
-		System.out.println("Sensor updated successfully!");
-		model.addAttribute("sensorType", sensorTypeRepository.findAll());
-		sensorRepository.save(sensor);
-		return "redirect:/sensor";
 	}
 
 }

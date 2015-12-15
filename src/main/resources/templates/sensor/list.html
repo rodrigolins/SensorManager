@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html layout:decorator="base/base">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorator="base/base">
 	<head>
 		<title>Sensor list</title>
 	</head>
@@ -7,31 +9,31 @@
 		<div layout:fragment="body">
 			<div class="container">
 				<div class="row">
-					<h1 class="pull-left">List sensors</h1>
-					<div class="pull-left btn-menu-group">
-					  <a th:href="@{/sensor/new}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New sensor</a>
+					<div class="col-xs-12">
+						<h1 class="pull-left">List sensors</h1>
+						<div class="pull-left btn-menu-group">
+						  <a th:href="@{/sensor/new}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New sensor</a>
+						</div>
 					</div>
 				</div>
-				<div class="row">
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Type</th>
-								<th>Model</th>
-								<th>Manufacturer</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="sensor : ${sensors}" class="clickable-row" th:attr="data-href=@{/sensor/{id}(id=${sensor.id})}">
-								<td th:text="${sensor.id}"></td>
-								<td th:text="${sensor.sensorType.name}"></td>
-								<td th:text="${sensor.model}"></td>
-								<td th:text="${sensor.manufacturer}"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Model</th>
+                            <th>Manufacturer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="sensor : ${sensors}" class="clickable-row" th:attr="data-href=@{/sensor/{id}(id=${sensor.id})}">
+                            <td th:text="${sensor.id}"></td>
+                            <td th:text="${sensor.sensorType.name}"></td>
+                            <td th:text="${sensor.model}"></td>
+                            <td th:text="${sensor.manufacturer}"></td>
+                        </tr>
+                    </tbody>
+                </table>
 			</div>
 		</div>
 	</body>
