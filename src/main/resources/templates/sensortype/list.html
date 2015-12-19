@@ -1,34 +1,35 @@
 <!DOCTYPE html>
-<html layout:decorator="base/base">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorator="base/base">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Sensor type list</title>
 	</head>
 	<body>
 		<div layout:fragment="body">
 			<div class="container">
 				<div class="row">
-					<h1 class="pull-left">List sensor types</h1>
-					<div class="pull-left btn-menu-group">
-					  <a th:href="@{/sensortype/new}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New sensor type</a>
+					<div class="col-xs-12">
+						<h1 class="pull-left">Sensor type list</h1>
+						<div class="pull-left btn-menu-group">
+							<a th:href="@{/sensortype/new}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New sensor type</a>
+						</div>
 					</div>
 				</div>
-				<div class="row">
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="sensortype : ${sensortypes}" class="clickable-row" th:attr="data-href=@{/sensortype/{id}(id=${sensortype.id})}">
-								<td th:text="${sensortype.id}"></td>
-								<td th:text="${sensortype.name}"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="sensortype : ${sensortypes}" class="clickable-row" th:attr="data-href=@{/sensortype/{id}(id=${sensortype.id})}">
+							<td th:text="${sensortype.id}"></td>
+							<td th:text="${sensortype.name}"></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</body>

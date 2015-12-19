@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html layout:decorator="base/base">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorator="base/base">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Sensor delete</title>
 	</head>
 	<body>
-		<p th:text="'Do you want to delete sensor: ' + ${id} + '?'" />
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+                    <div class="col-xs-12">
+                        <h1>Sensor delete</h1>
+                        <div>
+                            Are you sure you want to delete sensor <span th:text="${sensor.model}"></span> ?
+                        </div>
+                        <div>
+                            <div class="row">
+                                <hr/>
+                            </div>
+                            <form action="#" class="form-horizontal" th:action="@{/sensor/{id}/delete(id=${sensor.id})}" th:object="${sensor}" method="post">
+                                <div class="form-group">
+                                    <div class="col-sm-8">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <a th:href="@{/sensor/{id}(id=${sensor.id})}" class="btn btn-default">Cancel</a>
+                                    </div>
+                                    <div class="col-sm-4 hidden-xs"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
 	</body>
 </html>

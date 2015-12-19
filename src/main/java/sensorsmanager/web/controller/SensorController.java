@@ -90,7 +90,7 @@ public class SensorController {
     // FOLLOW ALWAYS THIS ORDER: PathVariable, ModelAttribute, BingResult, Model
     @RequestMapping(value="/{id}/update", method=RequestMethod.POST)
     public String sensorUpdate(@PathVariable Long id, @Valid @ModelAttribute("sensor") Sensor sensor,
-                               BindingResult bindingResult, Model model) {
+                               BindingResult bindingResult, Model model, final RedirectAttributes redirectAttributes) {
         System.out.println("POST - sensorUpdate");
         System.out.println("Before update: " + sensor);
         model.addAttribute("sensorType", sensorTypeRepository.findAll());
@@ -98,48 +98,65 @@ public class SensorController {
         if (bindingResult.hasErrors()) {
             System.out.println("Error occured when updating sensor.");
             System.out.println(bindingResult);
-
+            model.addAttribute("errorMessage", "Fail to update a sensor. Check error messages.");
             return "sensor/update";
         }
 
-        System.out.println("Sensor updated successfully!");
+        redirectAttributes.addFlashAttribute("successMessage", "Sensor updated successfully");
         sensorRepository.save(sensor);
-        return "redirect:/sensor";
+        return "redirect:/sensor/" + id.toString();
     }
 
 	@RequestMapping(value="/{id}/delete", method = RequestMethod.GET)
 	public String sensorDelete(@PathVariable Long id, Model model) {
         System.out.println("GET - deleteSensor");
-		model.addAttribute("id", id);
+        Sensor sensor = sensorRepository.findOne(id);
+		model.addAttribute("sensor", sensor);
 		return "sensor/delete";
 	}
+
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String sensorDelete(@PathVariable Long id, final RedirectAttributes redirectAttributes) {
+        System.out.println("POST - deleteSensor");
+        redirectAttributes.addFlashAttribute("successMessage", "Sensor deleted successfully");
+        sensorRepository.delete(id);
+        return "redirect:/sensor";
+    }
+
+    @RequestMapping(value = "/{id}/property/{propertyid}/delete", method = RequestMethod.POST)
+    public String removePropertyFromSensor(@PathVariable Long id, @PathVariable Long propertyid,
+                                           Model model, final RedirectAttributes redirectAttributes) {
+        System.out.println("POST - removePropertyFromSensor");
+        Sensor sensor = sensorRepository.findOne(id);
+
+        List<Property> properties = sensor.getProperties();
+        for(Property property : properties) {
+            if(property.getId() == propertyid) {
+                sensor.getProperties().remove(property);
+                sensorRepository.save(sensor);
+                propertyRepository.delete(property);
+                redirectAttributes.addFlashAttribute("successMessage", "Property deleted successfully");
+                return "redirect:/sensor/" + id.toString();
+            }
+        }
+        model.addAttribute("sensor", sensor);
+        Property property = propertyRepository.findOne(propertyid);
+        model.addAttribute("property", property);
+
+        model.addAttribute("errorMessage", "Fail to delete a property. Check error messages.");
+        return "sensor/property/delete";
+    }
 	
 	@RequestMapping(value="/{id}/property/{propertyid}/delete", method=RequestMethod.GET)
-	public String removePropertyFromSensor(@PathVariable Long id, @PathVariable Long propertyid, Model model) {
+	public String removePropertyFromSensor(@PathVariable Long id, @PathVariable Long propertyid,
+                                           Model model) {
         System.out.println("GET - removePropertyFromSensor");
-		Sensor sensor = sensorRepository.findOne(id);
-		/*if(sensor == null) {
-			model.addAttribute("errorMessage", "Sensor doesn't exist! Please check the sensor id and try again.");
-			return "redirect:/sensor";
-		}*/
-		/*if(sensor.getProperties() == null || sensor.getProperties().size() == 0) {
-			model.addAttribute("errorMessage", "No properties to remove");
-			return "redirect:/sensor";
-		}*/
-		List<Property> properties = sensor.getProperties();
-		for(Property property : properties) {
-			if(property.getId() == propertyid) {
-				sensor.getProperties().remove(property);
-				sensorRepository.save(sensor);
-				propertyRepository.delete(property);
-				model.addAttribute("sensor", sensorRepository.findOne(id));
-				model.addAttribute("sensorType", sensorTypeRepository.findAll());
-				model.addAttribute("successMessage", "Property deleted successfully");
-				return "sensor/update";
-			}
-		}
-		model.addAttribute("errorMessage", "Going out directly");
-		return "sensor/list";
+        Sensor sensor = sensorRepository.findOne(id);
+        model.addAttribute("sensor", sensor);
+		Property property = propertyRepository.findOne(propertyid);
+        model.addAttribute("property", property);
+
+		return "sensor/property/delete";
 	}
 
 	// DO not remove Property from method signature
@@ -167,17 +184,14 @@ public class SensorController {
             model.addAttribute("errorMessage", "Fail to add a new property to a sensor. Check error messages.");
             return "sensor/property/new";
         }
+
         Property newProperty = new Property(property.getPropertyType(), property.getValue(),
                 property.getUnit(),	property.getBoundary());
 
-        System.out.println("newProperty = " + newProperty);
         propertyRepository.save(newProperty);
-
-        System.out.println("newProperty = " + newProperty);
-
         sensor.addProperty(newProperty);
         sensorRepository.save(sensor);
-        return "redirect:/sensor";
+        return "redirect:/sensor/" + id.toString();
     }
 
 	
@@ -202,28 +216,28 @@ public class SensorController {
 		model.addAttribute("propertyType", propertyTypeRepository.findAll());
 		return "sensor/property/update";
 	}
-	
+
 	@RequestMapping(value="/{id}/property/{propertyid}/update", method=RequestMethod.POST)
-	public String sensorPropertyUpdate(@ModelAttribute("property") Property property, @PathVariable Long id,
-									   @PathVariable Long propertyid, BindingResult bindingResult, Model model) {
+	public String sensorPropertyUpdate(@PathVariable Long id, @PathVariable Long propertyid,
+                                       @Valid @ModelAttribute("property") Property property,
+									   BindingResult bindingResult, Model model,
+                                       final RedirectAttributes redirectAttributes) {
         System.out.println("POST - sensorPropertyUpdate");
-		System.out.println("Before update: " + property);
-		if (bindingResult.hasErrors()) {
+
+        if (bindingResult.hasErrors()) {
 			System.out.println("Error occured when updating property.");
 			System.out.println(bindingResult);
 			model.addAttribute("propertyType", propertyTypeRepository.findAll());
+            model.addAttribute("sensor", sensorRepository.findOne(id));
+            model.addAttribute("property", propertyRepository.findOne(propertyid));
+            model.addAttribute("errorMessage", "Fail to update a property. Check error messages.");
 			return "/sensor/property/update";
 		}
 		
-		model.addAttribute("propertyType", propertyTypeRepository.findAll());
-		model.addAttribute("sensor", sensorRepository.findOne(id));
-		model.addAttribute("property", propertyRepository.findOne(propertyid));
 		propertyRepository.save(property);
 		
-		System.out.println("Property updated successfully!");
-		model.addAttribute("successMessage", "Property updated successfully");
-//		return "redirect:/sensor";
-		return "/sensor/property/detail";
+        redirectAttributes.addFlashAttribute("successMessage", "Property updated successfully");
+		return "redirect:/sensor/" + id.toString();
 	}
 
 }

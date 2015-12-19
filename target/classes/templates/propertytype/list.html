@@ -1,15 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Property type list</title>
-	</head>
-	<body>
-		<h1>Property type list</h1>
-		<ul th:each="property : ${properties}">
-			<li th:text="'ID: ' + ${property.id}"></li>
-			<li th:text="'Name: '+ ${property.name}"></li>
-			<li>-------------------------------------</li>
-		</ul>
-	</body>	
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorator="base/base">
+<head>
+	<title>Property type list</title>
+</head>
+<body>
+<div layout:fragment="body">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 class="pull-left">Property type list</h1>
+				<div class="pull-left btn-menu-group">
+					<a th:href="@{/propertytype/new}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New property type</a>
+				</div>
+			</div>
+		</div>
+		<table class="table table-hover">
+			<thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                </tr>
+			</thead>
+			<tbody>
+                <tr th:each="propertytype : ${propertytypes}" class="clickable-row" th:attr="data-href=@{/propertytype/{id}(id=${propertytype.id})}">
+                    <td th:text="${propertytype.id}"></td>
+                    <td th:text="${propertytype.name}"></td>
+                </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
 </html>

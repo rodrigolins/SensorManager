@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="base/base">
+    <head>
+        <title>Sensor type update</title>
+    </head>
+    <body>
+        <div layout:fragment="body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1 class="pull-left">Sensor type update</h1>
+                    </div>
+                </div>
+                <form action="#" class="form-horizontal" th:action="@{/sensortype/{id}/update(id=${sensortype.id})}" th:object="${sensortype}" method="post">
 
-</body>
+                    <div th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : form-group">
+                        <label th:for="name" class="col-sm-4 control-label">Name:</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" th:field="*{name}"/>
+                            <span th:class="${#fields.hasErrors('name')} ? help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error message</span>
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-4">
+                            <button type="submit" class="btn btn-default">Save</button>
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
 </html>

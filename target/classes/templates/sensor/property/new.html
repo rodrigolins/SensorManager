@@ -16,8 +16,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <hr/>
+                </div>
                 <div th:if="${!propertyTypes.isEmpty()}">
                     <div class="form-horizontal">
+                        <h3>Sensor</h3>
                         <div class="form-group">
                             <label th:for="id" class="col-sm-4 control-label">ID:</label>
                             <div class="col-sm-4">
@@ -53,6 +57,7 @@
                     </div>
 
                     <form action="#" class="form-horizontal" th:action="@{/sensor/{id}/property/add(id=${sensor.id})}" th:object="${property}" method="post">
+                        <h3>Property</h3>
                         <div class="form-group">
                             <label th:for="propertyType" class="col-sm-4 control-label">Property type:</label>
                             <div class="col-sm-4">
@@ -103,7 +108,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-4">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button type="submit" class="btn btn-default">Create</button>
                                 <button type="reset" class="btn btn-default">Reset</button>
                             </div>
                             <div class="col-sm-4 hidden-xs"></div>
