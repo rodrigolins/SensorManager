@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorator="base/base">
+	<head>
+		<title>Timed property detail</title>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<h1 class="pull-left">Timed property detail</h1>
+						<div class="pull-left btn-menu-group">
+						    <a th:href="@{/sensor/{id}/timedproperty/{timedpropertyid}/update(id=${sensor.id}, timedpropertyid=${timedproperty.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Update</a>
+                            <a th:href="@{/sensor/{id}/timedproperty/{timedpropertyid}/delete(id=${sensor.id}, timedpropertyid=${timedproperty.id})}" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+						</div>
+					</div>
+				</div>
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label th:for="id" class="col-sm-4 control-label">ID:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.id}" th:disabled="disabled" />
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="propertyType" class="col-sm-4 control-label">Property type:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.propertyType.name}" th:disabled="disabled" />
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="value" class="col-sm-4 control-label">Value:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.value}" th:disabled="disabled" />
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="unit" class="col-sm-4 control-label">Unit:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.unit}" th:disabled="disabled" />
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="time" class="col-sm-4 control-label">Time:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.time}" th:disabled="disabled" />
+                        </div>
+                        <div class="col-sm-4 hidden-xs"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="boundary" class="col-sm-4 control-label">Boundary:</label>
+                        <div class="col-sm-4">
+                            <input th:type="text" class="form-control" th:field="${timedproperty.boundary.name}" th:disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</body>
+</html>

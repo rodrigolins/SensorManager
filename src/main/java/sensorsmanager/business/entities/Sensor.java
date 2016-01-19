@@ -1,17 +1,12 @@
 package sensorsmanager.business.entities;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Sensor {
@@ -31,10 +26,23 @@ public class Sensor {
 	@Size(min=3, max=50)
 	private String manufacturer;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Property> properties;
 
+    @OneToMany(cascade = CascadeType.ALL)
+	private List<TimedProperty> timedProperties;
+
 	public Sensor() {}
+
+    public Sensor(SensorType sensorType, String model, String manufacturer, List<Property> properties,
+                  List<TimedProperty> timedProperties) {
+        super();
+        this.sensorType = sensorType;
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.properties = properties;
+        this.timedProperties = timedProperties;
+    }
 
 	public Sensor(SensorType sensorType, String model, String manufacturer, List<Property> properties) {
 		super();
@@ -90,8 +98,16 @@ public class Sensor {
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
-	
-	public void addProperty(Property property) {
+
+    public List<TimedProperty> getTimedProperties() {
+        return timedProperties;
+    }
+
+    public void setTimedProperties(List<TimedProperty> timedProperties) {
+        this.timedProperties = timedProperties;
+    }
+
+    public void addProperty(Property property) {
 		if(this.properties == null) {
 			this.properties = new ArrayList<Property>();
 			this.properties.add(property);
@@ -99,13 +115,25 @@ public class Sensor {
 			this.properties.add(property);
 		}
 	}
-	
 
-	@Override
-	public String toString() {
-		return "Sensor [id=" + id + ", sensorType=" + sensorType + ", model="
-				+ model + ", manufacturer=" + manufacturer + ", properties="
-				+ properties + "]";
-	}
+    public void addTimedProperty(TimedProperty timedProperty) {
+        if(this.timedProperties == null) {
+            this.timedProperties = new ArrayList<TimedProperty>();
+            this.timedProperties.add(timedProperty);
+        } else {
+            this.timedProperties.add(timedProperty);
+        }
+    }
 
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "id=" + id +
+                ", sensorType=" + sensorType +
+                ", model='" + model + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", properties=" + properties +
+                ", timedProperties=" + timedProperties +
+                '}';
+    }
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Property {
 	
-	private enum Boundary {
+	public enum Boundary {
 		EQ("Equals"), GT("Greater than"), LT("Lower than"), DV("Standard deviation");
 		
 		private String name;

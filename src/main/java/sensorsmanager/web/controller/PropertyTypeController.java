@@ -1,7 +1,5 @@
 package sensorsmanager.web.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sensorsmanager.business.entities.Property;
 import sensorsmanager.business.entities.PropertyType;
-import sensorsmanager.business.entities.Sensor;
-import sensorsmanager.business.entities.SensorType;
 import sensorsmanager.business.repositories.PropertyRepository;
 import sensorsmanager.business.repositories.PropertyTypeRepository;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/propertytype")

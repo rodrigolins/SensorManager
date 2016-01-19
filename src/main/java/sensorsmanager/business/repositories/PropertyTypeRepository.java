@@ -8,6 +8,6 @@ import sensorsmanager.business.entities.PropertyType;
 
 public interface PropertyTypeRepository extends CrudRepository<PropertyType, Long> {
 	
-	List<PropertyType> findPropertyTypeByName(String name);
+	PropertyType findPropertyTypeByName(String name);
 
 }
