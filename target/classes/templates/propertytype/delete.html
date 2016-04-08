@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="base/base">
+<head>
+    <title>Property type delete</title>
+</head>
+<body>
+<div layout:fragment="body">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Property type delete</h1>
+                <div>
+                    Are you sure you want to delete property type [<span th:text="${propertytype.name}"></span>] ?
+                </div>
+                <div>
+                    <div class="row">
+                        <hr/>
+                    </div>
+                    <form action="#" class="form-horizontal" th:action="@{/propertytype/{id}/delete(id=${propertytype.id})}" th:object="${propertytype}" method="post">
+                        <div class="form-group">
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <a th:href="@{/propertytype/{id}(id=${propertytype.id})}" class="btn btn-default">Cancel</a>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

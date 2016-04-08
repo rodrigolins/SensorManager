@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="base/base">
+<head>
+    <title>Property type detail</title>
+</head>
+<body>
+<div layout:fragment="body">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="pull-left">Property type detail</h1>
+                <div class="pull-left btn-menu-group">
+                    <a th:href="@{/propertytype/{id}/update(id=${propertytype.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Update</a>
+                    <a th:href="@{/propertytype/{id}/delete(id=${propertytype.id})}" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label th:for="id" class="col-sm-4 control-label">ID:</label>
+                <div class="col-sm-4">
+                    <input th:type="text" class="form-control" th:field="${propertytype.id}" th:disabled="disabled"/>
+                </div>
+                <div class="col-sm-4 hidden-xs"></div>
+            </div>
+
+            <div class="form-group">
+                <label th:for="name" class="col-sm-4 control-label">Name:</label>
+                <div class="col-sm-4">
+                    <input th:type="text" class="form-control" th:field="${propertytype.name}" th:disabled="disabled"/>
+                </div>
+                <div class="col-sm-4 hidden-xs"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

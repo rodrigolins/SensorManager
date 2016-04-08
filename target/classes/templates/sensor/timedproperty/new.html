@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="base/base">
+	<head>
+		<title>Add new timed property to sensor</title>
+	</head>
+	<body>
+		<div layout:fragment="body">
+			<div class="container">
+				<div class="row">
+                    <div class="col-xs-12">
+                        <h1>Add new timed property to sensor</h1>
+                        <div th:if="${propertyTypes.isEmpty()}">
+                            <p>Please add a new property type before adding a timed property by clicking <a th:href="@{/propertytype/new}">here</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr/>
+                </div>
+                <div th:if="${!propertyTypes.isEmpty()}">
+                    <div class="form-horizontal">
+                        <h3>Sensor</h3>
+                        <div class="form-group">
+                            <label th:for="id" class="col-sm-4 control-label">ID:</label>
+                            <div class="col-sm-4">
+                                <input th:type="text" class="form-control" th:field="${sensor.id}" th:disabled="disabled" />
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="sensorType" class="col-sm-4 control-label">Sensor type:</label>
+                            <div class="col-sm-4">
+                                <input th:type="text" class="form-control" th:field="${sensor.sensorType.name}" th:disabled="disabled" />
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="model" class="col-sm-4 control-label">Model:</label>
+                            <div class="col-sm-4">
+                                <input th:type="text" class="form-control" th:field="${sensor.model}" th:disabled="disabled" />
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="manufacturer" class="col-sm-4 control-label">Manufacturer:</label>
+                            <div class="col-sm-4">
+                                <input th:type="text" class="form-control" th:field="${sensor.manufacturer}" th:disabled="disabled" />
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <hr/>
+                    </div>
+
+                    <form action="#" class="form-horizontal" th:action="@{/sensor/{id}/timedproperty/add(id=${sensor.id})}" th:object="${timedProperty}" method="post">
+                        <h3>Timed Property</h3>
+                        <div class="form-group">
+                            <label th:for="propertyType" class="col-sm-4 control-label">Property type:</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <select class="form-control" th:field="*{propertyType}">
+                                        <option th:each="type : ${propertyTypes}"
+                                                th:value="${type.id}"
+                                                th:text="${type.name}"></option>
+                                    </select>
+                                    <span class="input-group-addon">
+                                        <a th:href="@{/propertytype/new}" class="glyphicon glyphicon-plus"></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+
+                        <div th:class="${#fields.hasErrors('value')} ? 'form-group has-error' : form-group">
+                            <label th:for="value" class="col-sm-4 control-label">Value:</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" th:field="*{value}"/>
+                                <span th:class="${#fields.hasErrors('value')} ? help-block" th:if="${#fields.hasErrors('value')}" th:errors="*{value}">Value error message</span>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+
+                        <div th:class="${#fields.hasErrors('unit')} ? 'form-group has-error' : form-group">
+                            <label th:for="unit" class="col-sm-4 control-label">Unit:</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" th:field="*{unit}"/>
+                                <span th:class="${#fields.hasErrors('unit')} ? help-block" th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}">Unit error</span>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+
+                        <div th:class="${#fields.hasErrors('time')} ? 'form-group has-error' : form-group">
+                            <label th:for="time" class="col-sm-4 control-label">Time:</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" th:field="*{time}"/>
+                                <span th:class="${#fields.hasErrors('time')} ? help-block" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">Time error message</span>
+                            </div>
+                            <div class="col-sm-4 hidden-xs">in milisseconds</div>
+                        </div>
+
+                        <!-- http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/ -->
+                        <div class="form-group">
+                            <label th:for="boundary" class="col-sm-4 control-label">Boundary:</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" th:field="*{boundary}">
+                                    <option th:each="type : ${T(sensorsmanager.business.entities.TimedProperty.Boundary).values()}"
+                                            th:value="${type}"
+                                            th:text="${type.name}"></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-4">
+                                <button type="submit" class="btn btn-default">Create</button>
+                                <button type="reset" class="btn btn-default">Reset</button>
+                            </div>
+                            <div class="col-sm-4 hidden-xs"></div>
+                        </div>
+                    </form>
+                </div>
+			</div>
+		</div>
+	</body>
+</html>
