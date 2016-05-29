@@ -62,7 +62,7 @@
 							<a th:href="@{/sensor/{id}/property/add(id=${sensor.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New property</a>
 						</div>
                         <div class="btn-group btn-property-group">
-                            <a th:href="@{/sensor/{id}/timedproperty/add(id=${sensor.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New timed property</a>
+                            <a th:href="@{/sensor/{id}/rule/add(id=${sensor.id})}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Rule</a>
                         </div>
 					</div>
 				</div>
@@ -100,16 +100,16 @@
 					</div>
 				</div>
 
-                <!-- Timed Properties -->
-                <div class="row" th:if="${sensor.timedProperties.isEmpty()}">
+                <!-- Rules -->
+                <div class="row" th:if="${sensor.rules.isEmpty()}">
                     <div class="col-xs-12">
-                        <p>There are no timed properties for this sensor.</p>
+                        <p>There are no rules for this sensor.</p>
                     </div>
                 </div>
-                <div class="row" th:if="${!sensor.timedProperties.isEmpty()}">
+                <div class="row" th:if="${!sensor.rules.isEmpty()}">
                     <div class="col-xs-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Timed Properties</div>
+                            <div class="panel-heading">Rules</div>
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -122,13 +122,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="timedproperty : ${sensor.timedProperties}" class="clickable-row" th:attr="data-href=@{/sensor/{id}/timedproperty/{timedpropertyid}(id=${sensor.id}, timedpropertyid=${timedproperty.id})}">
-                                    <td th:text="${timedproperty.id}"></td>
-                                    <td th:text="${timedproperty.propertyType.name}"></td>
-                                    <td th:text="${timedproperty.value}"></td>
-                                    <td th:text="${timedproperty.unit}"></td>
-                                    <td th:text="${timedproperty.time}"></td>
-                                    <td th:text="${timedproperty.boundary.name}"></td>
+                                <tr th:each="rule : ${sensor.rules}" class="clickable-row" th:attr="data-href=@{/sensor/{id}/rule/{ruleid}(id=${sensor.id}, ruleid=${rule.id})}">
+                                    <td th:text="${rule.id}"></td>
+                                    <td th:text="${rule.propertyType.name}"></td>
+                                    <td th:text="${rule.value}"></td>
+                                    <td th:text="${rule.unit}"></td>
+                                    <td th:text="${rule.time}"></td>
+                                    <td th:text="${rule.boundary.name}"></td>
                                 </tr>
                                 </tbody>
                             </table>

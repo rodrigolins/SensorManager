@@ -3,16 +3,16 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  layout:decorator="base/base">
 	<head>
-		<title>Timed property update</title>
+		<title>Rule update</title>
 	</head>
 	<body>
 		<div layout:fragment="body">
 			<div class="container">
 				<div class="row">
-					<h1>Timed property update</h1>
+					<h1>Rule update</h1>
 				</div>
-				<form class="form-horizontal" action="#" th:action="@{/sensor/{id}/timedproperty/{timedpropertyid}/update(id=${sensor.id},timedpropertyid=${timedproperty.id})}"
-					  th:object="${timedproperty}" method="post">
+				<form class="form-horizontal" action="#" th:action="@{/sensor/{id}/rule/{ruleid}/update(id=${sensor.id},ruleid=${rule.id})}"
+					  th:object="${rule}" method="post">
 
 					<div class="form-group">
 						<label th:for="propertyType" class="col-sm-4 control-label">Property type:</label>
@@ -57,7 +57,7 @@
 						<label th:for="boundary" class="col-sm-4 control-label">Boundary:</label>
 						<div class="col-sm-4">
 							<select th:field="*{boundary}" th:class="form-control">
-								<option th:each="type: ${T(sensorsmanager.business.entities.TimedProperty.Boundary).values()}"
+								<option th:each="type: ${T(sensorsmanager.business.entities.Rule.Boundary).values()}"
 									th:value="${type}"
 									th:text="${type.name}">
 								</option>
@@ -69,7 +69,7 @@
 					<div class="form-group">
 						<div class="col-sm-offset-4 col-sm-4">
 							<button type="submit" class="btn btn-default">Save
-								<input type="hidden" th:field="${timedproperty.id}" />
+								<input type="hidden" th:field="${rule.id}" />
 							</button>
 						</div>
 						<div class="col-sm-4 hidden-xs"></div>

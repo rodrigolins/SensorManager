@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class TimedProperty {
+public class Rule {
 
     public enum Boundary {
         IC("Increase"), DC("Decrease"), DE("Delta");
@@ -40,11 +40,11 @@ public class TimedProperty {
 
     private Boundary boundary;
 
-    public TimedProperty() {
+    public Rule() {
 
     }
 
-    public TimedProperty(PropertyType propertyType, Float value, String unit, Long time, Boundary boundary) {
+    public Rule(PropertyType propertyType, Float value, String unit, Long time, Boundary boundary) {
         this.propertyType = propertyType;
         this.value = value;
         this.unit = unit;

@@ -3,16 +3,16 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorator="base/base">
 	<head>
-		<title>Add new timed property to sensor</title>
+		<title>Add new Rule to sensor</title>
 	</head>
 	<body>
 		<div layout:fragment="body">
 			<div class="container">
 				<div class="row">
                     <div class="col-xs-12">
-                        <h1>Add new timed property to sensor</h1>
+                        <h1>Add new rule to sensor</h1>
                         <div th:if="${propertyTypes.isEmpty()}">
-                            <p>Please add a new property type before adding a timed property by clicking <a th:href="@{/propertytype/new}">here</a></p>
+                            <p>Please add a new property type before adding a rule by clicking <a th:href="@{/propertytype/new}">here</a></p>
                         </div>
                     </div>
                 </div>
@@ -56,8 +56,8 @@
                         <hr/>
                     </div>
 
-                    <form action="#" class="form-horizontal" th:action="@{/sensor/{id}/timedproperty/add(id=${sensor.id})}" th:object="${timedProperty}" method="post">
-                        <h3>Timed Property</h3>
+                    <form action="#" class="form-horizontal" th:action="@{/sensor/{id}/rule/add(id=${sensor.id})}" th:object="${rule}" method="post">
+                        <h3>Rule</h3>
                         <div class="form-group">
                             <label th:for="propertyType" class="col-sm-4 control-label">Property type:</label>
                             <div class="col-sm-4">
@@ -107,7 +107,7 @@
                             <label th:for="boundary" class="col-sm-4 control-label">Boundary:</label>
                             <div class="col-sm-4">
                                 <select class="form-control" th:field="*{boundary}">
-                                    <option th:each="type : ${T(sensorsmanager.business.entities.TimedProperty.Boundary).values()}"
+                                    <option th:each="type : ${T(sensorsmanager.business.entities.Rule.Boundary).values()}"
                                             th:value="${type}"
                                             th:text="${type.name}"></option>
                                 </select>

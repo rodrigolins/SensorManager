@@ -1,7 +1,5 @@
 package sensorsmanager.business.repositories;
 
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 
 import sensorsmanager.business.entities.PropertyType;

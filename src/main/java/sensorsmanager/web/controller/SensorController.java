@@ -8,17 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import sensorsmanager.business.entities.Property;
+import sensorsmanager.business.entities.Rule;
 import sensorsmanager.business.entities.Sensor;
-import sensorsmanager.business.entities.TimedProperty;
-import sensorsmanager.business.repositories.*;
+import sensorsmanager.business.repositories.PropertyRepository;
+import sensorsmanager.business.repositories.PropertyTypeRepository;
+import sensorsmanager.business.repositories.RuleRepository;
+import sensorsmanager.business.repositories.SensorRepository;
+import sensorsmanager.business.repositories.SensorTypeRepository;
 
 @Controller
 @RequestMapping("/sensor")
@@ -37,7 +40,7 @@ public class SensorController {
 	PropertyTypeRepository propertyTypeRepository;
 
     @Autowired
-    TimedPropertyRepository timedPropertyRepository;
+    RuleRepository ruleRepository;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public String sensorsList(Model model) {
@@ -242,41 +245,41 @@ public class SensorController {
 		return "redirect:/sensor/" + id.toString();
 	}
 
-    // TimedProperties
-    @RequestMapping(value = "/{id}/timedproperty/{timedpropertyid}/delete", method = RequestMethod.POST)
-    public String removeTimedPropertyFromSensor(@PathVariable Long id, @PathVariable Long timedpropertyid,
+    // Rules
+    @RequestMapping(value = "/{id}/rule/{ruleid}/delete", method = RequestMethod.POST)
+    public String removeRuleFromSensor(@PathVariable Long id, @PathVariable Long ruleid,
                                            Model model, final RedirectAttributes redirectAttributes) {
         System.out.println("POST - removeTimedPropertyFromSensor");
         Sensor sensor = sensorRepository.findOne(id);
 
-        List<TimedProperty> timedProperties = sensor.getTimedProperties();
-        for(TimedProperty timedProperty : timedProperties) {
-            if(timedProperty.getId() == timedpropertyid) {
-                sensor.getTimedProperties().remove(timedProperty);
+        List<Rule> rules = sensor.getRules();
+        for(Rule rule : rules) {
+            if(rule.getId() == ruleid) {
+                sensor.getRules().remove(rule);
                 sensorRepository.save(sensor);
-                timedPropertyRepository.delete(timedProperty);
-                redirectAttributes.addFlashAttribute("successMessage", "Timed property deleted successfully");
+                ruleRepository.delete(rule);
+                redirectAttributes.addFlashAttribute("successMessage", "Rule deleted successfully");
                 return "redirect:/sensor/" + id.toString();
             }
         }
         model.addAttribute("sensor", sensor);
-        TimedProperty timedProperty = timedPropertyRepository.findOne(timedpropertyid);
-        model.addAttribute("timedproperty", timedProperty);
+        Rule rule = ruleRepository.findOne(ruleid);
+        model.addAttribute("rule", rule);
 
-        model.addAttribute("errorMessage", "Fail to delete a timed property. Check error messages.");
-        return "sensor/timedproperty/delete";
+        model.addAttribute("errorMessage", "Fail to delete a rule. Check error messages.");
+        return "sensor/rule/delete";
     }
 
-    @RequestMapping(value="/{id}/timedproperty/{timedpropertyid}/delete", method=RequestMethod.GET)
-    public String removeTimedPropertyFromSensor(@PathVariable Long id, @PathVariable Long timedpropertyid,
+    @RequestMapping(value="/{id}/rule/{ruleid}/delete", method=RequestMethod.GET)
+    public String removeRuleFromSensor(@PathVariable Long id, @PathVariable Long ruleid,
                                            Model model) {
-        System.out.println("GET - removeTimedPropertyFromSensor");
+        System.out.println("GET - removeRuleFromSensor");
         Sensor sensor = sensorRepository.findOne(id);
         model.addAttribute("sensor", sensor);
-        TimedProperty timedProperty = timedPropertyRepository.findOne(timedpropertyid);
-        model.addAttribute("timedproperty", timedProperty);
+        Rule rule = ruleRepository.findOne(ruleid);
+        model.addAttribute("rule", rule);
 
-        return "sensor/timedproperty/delete";
+        return "sensor/rule/delete";
     }
 
 
@@ -289,20 +292,20 @@ public class SensorController {
         return "sensor/property/new";
     }*/
     // DO not remove TimedProperty from method signature
-    @RequestMapping(value="/{id}/timedproperty/add", method=RequestMethod.GET)
-    public String addTimedPropertyToSensor(@PathVariable Long id, Model model, TimedProperty timedproperty) {
-        System.out.println("GET - addTimedPropertyToSensor");
+    @RequestMapping(value="/{id}/rule/add", method=RequestMethod.GET)
+    public String addRuleToSensor(@PathVariable Long id, Model model, Rule rule) {
+        System.out.println("GET - addRuleToSensor");
         model.addAttribute("sensor", sensorRepository.findOne(id));
         model.addAttribute("propertyTypes", propertyTypeRepository.findAll());
-        return "sensor/timedproperty/new";
+        return "sensor/rule/new";
     }
 
-    @RequestMapping(value="/{id}/timedproperty/add", method=RequestMethod.POST)
-    public String addTimedPropertyToSensor(@PathVariable Long id, @Valid TimedProperty timedproperty, BindingResult bindingResult,
+    @RequestMapping(value="/{id}/rule/add", method=RequestMethod.POST)
+    public String addRuleToSensor(@PathVariable Long id, @Valid Rule rule, BindingResult bindingResult,
                                       Model model, final RedirectAttributes redirectAttributes) {
 
-        System.out.println("POST - addTimedPropertyToSensor");
-        System.out.println("timedproperty = " + timedproperty);
+        System.out.println("POST - addRuleToSensor");
+        System.out.println("rule = " + rule);
 
         Sensor sensor = sensorRepository.findOne(id);
         model.addAttribute("sensor", sensor);
@@ -311,60 +314,60 @@ public class SensorController {
             System.out.println(bindingResult.getAllErrors());
             model.addAttribute("propertyTypes", propertyTypeRepository.findAll());
             model.addAttribute("errorMessage", "Fail to add a new timed property to a sensor. Check error messages.");
-            return "sensor/timedproperty/new";
+            return "sensor/rule/new";
         }
 
-        TimedProperty newTimedProperty = new TimedProperty(timedproperty.getPropertyType(), timedproperty.getValue(),
-                timedproperty.getUnit(), timedproperty.getTime(), timedproperty.getBoundary());
+        Rule newRule = new Rule(rule.getPropertyType(), rule.getValue(),
+                rule.getUnit(), rule.getTime(), rule.getBoundary());
 
-        timedPropertyRepository.save(newTimedProperty);
-        sensor.addTimedProperty(newTimedProperty);
+        ruleRepository.save(newRule);
+        sensor.addRule(newRule);
         sensorRepository.save(sensor);
         return "redirect:/sensor/" + id.toString();
     }
 
-    @RequestMapping(value="/{id}/timedproperty/{timedpropertyid}", method=RequestMethod.GET)
-    public String sensorTimedPropertyDetail(@PathVariable Long id, @PathVariable Long timedpropertyid, Model model) {
-        System.out.println("GET - sensorTimedPropertyDetail");
+    @RequestMapping(value="/{id}/rule/{ruleid}", method=RequestMethod.GET)
+    public String sensorRuleDetail(@PathVariable Long id, @PathVariable Long ruleid, Model model) {
+        System.out.println("GET - sensorRuleDetail");
         Sensor sensor = sensorRepository.findOne(id);
         model.addAttribute("sensor", sensor);
-        TimedProperty timedproperty = timedPropertyRepository.findOne(timedpropertyid);
-        model.addAttribute("timedproperty", timedproperty);
+        Rule rule = ruleRepository.findOne(ruleid);
+        model.addAttribute("rule", rule);
         model.addAttribute("propertyType", propertyTypeRepository.findAll());
-        return "sensor/timedproperty/detail";
+        return "sensor/rule/detail";
     }
 
-    @RequestMapping(value="/{id}/timedproperty/{timedpropertyid}/update", method=RequestMethod.GET)
-    public String sensorTimedPropertyUpdate(@PathVariable Long id, @PathVariable Long timedpropertyid, Model model) {
-        System.out.println("GET - sensorTimedPropertyUpdate");
+    @RequestMapping(value="/{id}/rule/{ruleid}/update", method=RequestMethod.GET)
+    public String sensorRuleUpdate(@PathVariable Long id, @PathVariable Long ruleid, Model model) {
+        System.out.println("GET - sensorRuleUpdate");
         Sensor sensor = sensorRepository.findOne(id);
         model.addAttribute("sensor", sensor);
-        TimedProperty timedproperty = timedPropertyRepository.findOne(timedpropertyid);
-        model.addAttribute("timedproperty", timedproperty);
+        Rule rule = ruleRepository.findOne(ruleid);
+        model.addAttribute("rule", rule);
         model.addAttribute("propertyType", propertyTypeRepository.findAll());
-        return "sensor/timedproperty/update";
+        return "sensor/rule/update";
     }
 
-    @RequestMapping(value="/{id}/timedproperty/{timedpropertyid}/update", method=RequestMethod.POST)
-    public String sensorTimedPropertyUpdate(@PathVariable Long id, @PathVariable Long timedpropertyid,
-                                       @Valid @ModelAttribute("timedproperty") TimedProperty timedproperty,
+    @RequestMapping(value="/{id}/rule/{ruleid}/update", method=RequestMethod.POST)
+    public String sensorRuleUpdate(@PathVariable Long id, @PathVariable Long ruleid,
+                                       @Valid @ModelAttribute("rule") Rule rule,
                                        BindingResult bindingResult, Model model,
                                        final RedirectAttributes redirectAttributes) {
-        System.out.println("POST - sensorTimedPropertyUpdate");
+        System.out.println("POST - sensorRuleUpdate");
 
         if (bindingResult.hasErrors()) {
             System.out.println("Error occured when updating timed property.");
             System.out.println(bindingResult);
             model.addAttribute("propertyType", propertyTypeRepository.findAll());
             model.addAttribute("sensor", sensorRepository.findOne(id));
-            model.addAttribute("timedproperty", timedPropertyRepository.findOne(timedpropertyid));
-            model.addAttribute("errorMessage", "Fail to update a timed property. Check error messages.");
-            return "/sensor/timedproperty/update";
+            model.addAttribute("rule", ruleRepository.findOne(ruleid));
+            model.addAttribute("errorMessage", "Fail to update a rule. Check error messages.");
+            return "/sensor/rule/update";
         }
 
-        timedPropertyRepository.save(timedproperty);
+        ruleRepository.save(rule);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Timed property updated successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Rule updated successfully");
         return "redirect:/sensor/" + id.toString();
     }
 

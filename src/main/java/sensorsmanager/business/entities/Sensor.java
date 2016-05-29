@@ -1,12 +1,18 @@
 package sensorsmanager.business.entities;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Sensor {
@@ -30,18 +36,18 @@ public class Sensor {
 	private List<Property> properties;
 
     @OneToMany(cascade = CascadeType.ALL)
-	private List<TimedProperty> timedProperties;
+	private List<Rule> rules;
 
 	public Sensor() {}
 
     public Sensor(SensorType sensorType, String model, String manufacturer, List<Property> properties,
-                  List<TimedProperty> timedProperties) {
+                  List<Rule> rules) {
         super();
         this.sensorType = sensorType;
         this.model = model;
         this.manufacturer = manufacturer;
         this.properties = properties;
-        this.timedProperties = timedProperties;
+        this.rules = rules;
     }
 
 	public Sensor(SensorType sensorType, String model, String manufacturer, List<Property> properties) {
@@ -99,12 +105,12 @@ public class Sensor {
 		this.properties = properties;
 	}
 
-    public List<TimedProperty> getTimedProperties() {
-        return timedProperties;
+    public List<Rule> getRules() {
+        return rules;
     }
 
-    public void setTimedProperties(List<TimedProperty> timedProperties) {
-        this.timedProperties = timedProperties;
+    public void setRules(List<Rule> rules) {
+        this.rules = rules;
     }
 
     public void addProperty(Property property) {
@@ -116,12 +122,12 @@ public class Sensor {
 		}
 	}
 
-    public void addTimedProperty(TimedProperty timedProperty) {
-        if(this.timedProperties == null) {
-            this.timedProperties = new ArrayList<TimedProperty>();
-            this.timedProperties.add(timedProperty);
+    public void addRule(Rule rule) {
+        if(this.rules == null) {
+            this.rules = new ArrayList<Rule>();
+            this.rules.add(rule);
         } else {
-            this.timedProperties.add(timedProperty);
+            this.rules.add(rule);
         }
     }
 
@@ -133,7 +139,7 @@ public class Sensor {
                 ", model='" + model + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
                 ", properties=" + properties +
-                ", timedProperties=" + timedProperties +
+                ", rule=" + rules +
                 '}';
     }
 }
